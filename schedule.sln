@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "schedule", "schedule\schedule.csproj", "{6145BAC0-2B22-4B8C-A169-E394D7B21A69}"
+EndProject
+Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "DateInputForm", "..\DateInputForm\DateInputForm\bin\Debug\DateInputForm.exe", "{21A07758-7F88-42AA-AEC7-C25AEC915C58}"
+	ProjectSection(DebuggerProjectSystem) = preProject
+		PortSupplier = 00000000-0000-0000-0000-000000000000
+		Executable = C:\Users\ilya2\source\repos\DateInputForm\DateInputForm\bin\Debug\DateInputForm.exe
+		RemoteMachine = DESKTOP-L3F55HR
+		StartingDirectory = C:\Users\ilya2\source\repos\DateInputForm\DateInputForm\bin\Debug
+		Environment = По умолчанию
+		LaunchingEngine = 00000000-0000-0000-0000-000000000000
+		UseLegacyDebugEngines = No
+		LaunchSQLEngine = No
+		AttachLaunchAction = No
+		IORedirection = Auto
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Debug|x86.Build.0 = Debug|Any CPU
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Release|x86.ActiveCfg = Release|Any CPU
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Release|x86.Build.0 = Release|Any CPU
+		{21A07758-7F88-42AA-AEC7-C25AEC915C58}.Debug|Any CPU.ActiveCfg = Release|x86
+		{21A07758-7F88-42AA-AEC7-C25AEC915C58}.Debug|x86.ActiveCfg = Release|x86
+		{21A07758-7F88-42AA-AEC7-C25AEC915C58}.Release|Any CPU.ActiveCfg = Release|x86
+		{21A07758-7F88-42AA-AEC7-C25AEC915C58}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2F2EF77C-4317-4264-B339-EF7DE9525DF2}
+	EndGlobalSection
+EndGlobal
