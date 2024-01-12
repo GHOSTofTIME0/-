@@ -18,19 +18,20 @@ namespace schedule
         private DataGridView dataGridView1;
         private string[] daysOfWeek = { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" };
         private string outputPath;
+
+        private static string projectPath = Directory.GetParent(System.Windows.Forms.Application.StartupPath).Parent.Parent.FullName;
+        private string SubjectFilePath = Path.Combine(projectPath, "source", "предметы.txt");
         public Form1()
         {
             InitializeComponent();
+            disabledMenuItems();
         }
 
 
 
 
         //СОЗДАНИЕ 
-        private void создатьToolStripMenuItem_Click(object sender, EventArgs e)
-        {
 
-        }
 
         private void создатьToolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -98,8 +99,7 @@ namespace schedule
             rowNumerColumn.HeaderText = "#";
             dataGridView.Columns.Add(rowNumerColumn);
 
-            string projectPath = Directory.GetParent(System.Windows.Forms.Application.StartupPath).Parent.Parent.FullName;
-            string templatePath = Path.Combine(projectPath, "source", "предметы.txt");
+            
 
             for (int i = 0; i < 12; i++)
             {
@@ -111,9 +111,9 @@ namespace schedule
                     //subjectColumn.Items.AddRange(GetSubjectList().ToArray());
                     dataGridView.Columns.Add(subjectColumn);
 
-                    if(File.Exists(templatePath))
+                    if(File.Exists(SubjectFilePath))
                     {
-                        string[] lines = File.ReadAllLines(templatePath);
+                        string[] lines = File.ReadAllLines(SubjectFilePath);
 
                         foreach(string line in lines)
                         {
@@ -141,7 +141,7 @@ namespace schedule
 
             dataGridView1 = dataGridView;
 
-
+            enabledMenuItems();
 
             return dataGridView;
         }
@@ -159,20 +159,67 @@ namespace schedule
 
         private void добавитьПредметToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string projectPath = Directory.GetParent(System.Windows.Forms.Application.StartupPath).Parent.Parent.FullName;
-            string templatePath = Path.Combine(projectPath, "source", "предметы.txt");
+            
             using (var inputForm = new Form2())
             {
                 if(inputForm.ShowDialog() == DialogResult.OK)
                 {
                     string newText = inputForm.nameText;
-
-                    File.AppendAllText(templatePath, newText + "\r\n");
+                    int difficulty = Convert.ToInt32(inputForm.difficulty);
+                    AddSubjectWithDifficultyToFile(newText, difficulty);
                 }
             }
             UpdateComboBoxItems();
         }
+
+        private void AddSubjectWithDifficultyToFile(string subject, int difficulty)
+        {
+            string lineToAdd = $"{subject}:{difficulty}";
+            File.AppendAllText(SubjectFilePath, lineToAdd+ "\r\n");
+            UpdateComboBoxItems();
+        }
+
+        private Dictionary<string, int> ReadSubjectsAndDifficultiesFromFile()
+        {
+            Dictionary<string, int> subjectsAndDifficulty = new Dictionary<string, int>();
+
+            if(File.Exists(SubjectFilePath))
+            {
+                string[] lines = File.ReadAllLines(SubjectFilePath);
+
+                foreach (string line in lines)
+                {
+                    string[] parts = line.Split(':');
+
+                    if(parts.Length== 2)
+                    {
+                        string subject = parts[0];
+                        int difficulty;
+
+                        if (int.TryParse(parts[1], out difficulty))
+                        {
+                            subjectsAndDifficulty.Add(subject, difficulty);
+                        }
+                        else MessageBox.Show("Неверно введена сложность", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else MessageBox.Show("Неверный формат строки", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            return subjectsAndDifficulty;
+        }
         
+
+        private void disabledMenuItems()
+        {
+            добавитьПредметToolStripMenuItem.Enabled = false;
+            удалитьПредметToolStripMenuItem.Enabled = false;
+        }
+
+        private void enabledMenuItems()
+        {
+            добавитьПредметToolStripMenuItem.Enabled = true;
+            удалитьПредметToolStripMenuItem.Enabled = true;
+        }
 
 
 

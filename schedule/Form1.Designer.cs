@@ -63,7 +63,7 @@
             this.сохранитьToolStripMenuItem,
             this.печатьToolStripMenuItem});
             this.создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
-            this.создатьToolStripMenuItem.Click += new System.EventHandler(this.создатьToolStripMenuItem_Click);
+            
             // 
             // создатьToolStripMenuItem1
             // 
