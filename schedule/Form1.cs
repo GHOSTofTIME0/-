@@ -9,6 +9,7 @@ using Humanizer;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.IO;
+using System.Xml.Linq;
 
 namespace schedule
 {
@@ -21,6 +22,8 @@ namespace schedule
 
         private static string projectPath = Directory.GetParent(System.Windows.Forms.Application.StartupPath).Parent.Parent.FullName;
         private string SubjectFilePath = Path.Combine(projectPath, "source", "предметы.txt");
+
+        private string teachersFilePath = Path.Combine(projectPath, "source", "учителя.txt");
         public Form1()
         {
             InitializeComponent();
@@ -221,7 +224,33 @@ namespace schedule
             удалитьПредметToolStripMenuItem.Enabled = true;
         }
 
+        ////////////////////////////////////добавление/удаление учителей////////////////////////////////////////////////////////////////////
 
+        private void предметыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using(var inputForm = new Form4())
+            {
+                if(inputForm.ShowDialog() == DialogResult.OK)
+                {
+                    string lineToEnter =$"{inputForm.teacherFullName}:{inputForm.subjectName}";
+
+                    if(File.Exists(teachersFilePath))
+                    {
+                        File.AppendAllText(teachersFilePath, lineToEnter + "\r\n");
+                    }
+                    UpdateComboBoxItems();
+                }
+            }
+        }
+
+        private void удалитьУчителяToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using(var inputForm = new Form5())
+            {
+                inputForm.ShowDialog();
+            }
+            UpdateComboBoxItems();
+        }
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -508,6 +537,10 @@ namespace schedule
                 }
             }
         }
+
+        
+
+
 
         ///////////////////////////////////////////////////////////////////////
     }
