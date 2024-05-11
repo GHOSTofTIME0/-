@@ -12,13 +12,13 @@ using System.IO;
 using System.Xml.Linq;
 using System.Data.OleDb;
 using System.Data;
+using DocumentFormat.OpenXml.Bibliography;
 
 namespace schedule
 {
     public partial class Form1 : Form
     {
         private TabControl tab;
-        private DataGridView dataGridView1;
         private string[] daysOfWeek = { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" };
         private string outputPath;
 
@@ -72,7 +72,7 @@ namespace schedule
             for (int i = 0; i < 11; i++)
             {
                 TabPage tp = new TabPage(Convert.ToString(i + 1));
-                DataGridView Grid = CreateDataGridView(i+1);
+                DataGridView Grid = CreateDataGridView(i+1, 7);
                 tp.Controls.Add(Grid);
                 tab.TabPages.Add(tp);
 
@@ -97,7 +97,7 @@ namespace schedule
             }
         }
 
-        private DataGridView CreateDataGridView(int classNumber)
+        private DataGridView CreateDataGridView(int classNumber, int maxRowsCount)
         {
             DataGridView dataGridView = new DataGridView();
             dataGridView.Dock = DockStyle.Fill;
@@ -105,6 +105,12 @@ namespace schedule
             DataGridViewTextBoxColumn rowNumerColumn = new DataGridViewTextBoxColumn();
             rowNumerColumn.HeaderText = "#";
             dataGridView.Columns.Add(rowNumerColumn);
+            dataGridView.AllowUserToAddRows = false;
+
+            for (int rowIndex = 1; rowIndex <= maxRowsCount; rowIndex++)
+            {
+                dataGridView.Rows.Add(rowIndex.ToString());
+            }
 
 
             for (int i = 0; i < 12; i++)
@@ -118,7 +124,7 @@ namespace schedule
 
                     // Проверяем номер класса и выбираем соответствующую таблицу
                     string tableName;
-                    if (classNumber>=1 && classNumber <=4)
+                    if (classNumber >= 1 && classNumber <= 4)
                         tableName = "Disciplines1_4";
                     else if (classNumber >= 5 && classNumber <= 9)
                         tableName = "Disciplines5_9";
@@ -126,13 +132,18 @@ namespace schedule
                         tableName = "Disciplines10_11";
 
                     // Получаем названия полей из таблицы и заполняем ComboBox
-                    Dictionary<int, List<string>> headers = GetDisciplinesHeaders(connectString, tableName, classNumberI);
+                    Dictionary<int, Dictionary<string, int>> headers = GetDisciplinesHeaders(connectString, tableName, classNumberI);
                     if (headers.ContainsKey(i + 1))
                     {
-                        foreach (string header in headers[i + 1])
+                        Dictionary<string, int> classHeaders = headers[classNumberI];
+                        foreach (var header in classHeaders)
                         {
-                            subjectColumn.Items.Add(header);
+                            if (header.Value != 0)
+                            {
+                                subjectColumn.Items.Add(header.Key);
+                            }
                         }
+
                     }
                 }
                 else
@@ -148,61 +159,9 @@ namespace schedule
             return dataGridView;
         }
 
-        /* private DataGridView CreateDataGridView()
-         {
-             DataGridView dataGridView = new DataGridView();
-             dataGridView.Dock = DockStyle.Fill; // Используйте DockStyle.Fill
-
-             DataGridViewTextBoxColumn rowNumerColumn = new DataGridViewTextBoxColumn();
-             rowNumerColumn.HeaderText = "#";
-             dataGridView.Columns.Add(rowNumerColumn);
 
 
 
-             for (int i = 0; i < 12; i++)
-             {
-
-                 if (i % 2 == 0)
-                 {
-                     DataGridViewComboBoxColumn subjectColumn = new DataGridViewComboBoxColumn();
-                     subjectColumn.HeaderText = daysOfWeek[i / 2];
-                     //subjectColumn.Items.AddRange(GetSubjectList().ToArray());
-                     dataGridView.Columns.Add(subjectColumn);
-
-                     if(File.Exists(SubjectFilePath))
-                     {
-                         string[] lines = File.ReadAllLines(SubjectFilePath);
-
-                         foreach(string line in lines)
-                         {
-                             subjectColumn.Items.Add(line);
-                         }
-                     }
-                 }
-                 else
-                 {
-                     DataGridViewTextBoxColumn roomColumn = new DataGridViewTextBoxColumn();
-                     roomColumn.HeaderText = "кабинет";
-                     dataGridView.Columns.Add(roomColumn);
-                 }
-             }
-
-             dataGridView.CellClick += dataGridView_CellClick;
-
-             dataGridView.RowsAdded += dataGridView_RowsAdded;
-
-             dataGridView.RowsRemoved += dataGridView_RowsRemoved;
-
-             dataGridView.EditingControlShowing += dataGridView_EditingControlShowing;
-
-             dataGridView.CellEndEdit += dataGridView_CellEndEdit;
-
-             dataGridView1 = dataGridView;
-
-             enabledMenuItems();
-
-             return dataGridView;
-         }*/
 
         //////////////////////////////////////добавление и удаление предметов//////////////////////////////////////////////////////////////////
 
@@ -419,6 +378,22 @@ namespace schedule
 
         //СОХРАНЕНИЕ
 
+        private void ClearWordDocument(WordprocessingDocument wordDoc)
+        {
+            foreach (SdtElement contentControl in wordDoc.MainDocumentPart.Document.Body.Descendants<SdtElement>())
+            {
+                Run run = contentControl.Descendants<Run>().FirstOrDefault();
+                if (run != null)
+                {
+                    Text textElement = run.Descendants<Text>().FirstOrDefault();
+                    if (textElement != null)
+                    {
+                        textElement.Text = "";
+                    }
+                }
+            }
+        }
+
         private void GenerateWordDocument()
         {
             try
@@ -438,12 +413,14 @@ namespace schedule
 
                     using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(outputPath, true))
                     {
+                        ClearWordDocument(wordDoc);
                         for (int tabIndex = 0; tabIndex < tab.TabPages.Count; tabIndex++)
                         {
                             var tabPage = tab.TabPages[tabIndex];
 
                             int classNumber = int.Parse(tabPage.Text);
                             string wordClassNumber = classNumber.ToWords();
+
 
                             foreach (System.Windows.Forms.Control control in tabPage.Controls)
                             {
@@ -497,6 +474,7 @@ namespace schedule
             }
         }
 
+
         private void ReplaceContentControlText(WordprocessingDocument wordDoc, string controlName, string text)
         {
             // Поиск текстового поля по имени в документе Word
@@ -516,9 +494,8 @@ namespace schedule
                     }
                 }
             }
+           
         }
-
-
 
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -593,16 +570,11 @@ namespace schedule
             }
         }
 
+       
 
-
-
-
-
-        ///////////////////////////////////////////////////////////////////////
-        ///
-        /*public Dictionary<int, List<string>> GetDisciplinesHeaders(string connectionString, string tableName)
+        private Dictionary<int, Dictionary<string, int>> GetDisciplinesHeaders(string connectionString, string tableName, int classNumberI) // Доделать, баги ебобаные
         {
-            Dictionary<int, List<string>> headers = new Dictionary<int, List<string>>();
+            Dictionary<int, Dictionary<string, int>> headers = new Dictionary<int, Dictionary<string, int>>();
 
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
@@ -610,158 +582,41 @@ namespace schedule
                 {
                     connection.Open();
 
-                    // Получаем метаданные о столбцах таблицы
-                    System.Data.DataTable schemaTable = connection.GetSchema("Columns", new string[] { null, null, tableName });
+                    // Создаем SQL-запрос для получения всех данных из таблицы
+                    string query = $"SELECT * FROM {tableName}";
 
-                    // Обрабатываем полученные данные
-                    foreach (DataRow row in schemaTable.Rows)
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
                     {
-                        string columnName = row["COLUMN_NAME"].ToString();
-
-                        // Определяем номер класса из столбца "Key"
-                        if (columnName == "Class")
+                        using (OleDbDataReader reader = command.ExecuteReader())
                         {
-                            int classNumber = Convert.ToInt32(row["TABLE_NAME"].ToString().Substring(row["TABLE_NAME"].ToString().Length - 1));
+                            while (reader.Read())
+                            {
 
-                            // Для таблицы Disciplines5_9 и Disciplines10_11 номер класса следует увеличить на 4 и 9 соответственно
-                            if (tableName == "Disciplines5_9")
-                                classNumber +=4;
-                            else if (tableName == "Disciplines10_11")
-                                classNumber += 9;
+                                int classNumber = Convert.ToInt32(reader["Class"]);
+/*
+                                if (tableName == "Disciplines5_9") classNumber += 4;
+                                if (tableName == "Disciplines10_11") classNumber += 9;*/
 
-                            // Добавляем номер класса в словарь
-                            if(!headers.ContainsKey(classNumber)) headers[classNumber] = new List<string>();
+                                // Создаем словарь для текущего номера класса, если его еще нет
+                                if (!headers.ContainsKey(classNumberI))
+                                    headers[classNumberI] = new Dictionary<string, int>();
+
+                                // Получаем имена столбцов кроме "Class"
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    string columnName = reader.GetName(i);
+                                    if (columnName != "Class")
+                                    {
+                                        // Добавляем заголовок и балл в словарь для текущего номера класса
+                                        int fieldValue = Convert.ToInt32(reader[columnName]);
+                                        if (fieldValue != 0)
+                                        {
+                                            headers[classNumberI][columnName] = fieldValue;
+                                        }
+                                    }
+                                }
+                            }
                         }
-                        else
-                        {
-                            // Добавляем имя столбца в список заголовков для текущего номера класса
-                            headers[int.Parse(row["TABLE_NAME"].ToString().Substring(row["TABLE_NAME"].ToString().Length - 1))].Add(columnName);
-
-                        }
-                    }
-                }
-                catch (OleDbException ex)
-                {
-                    Console.WriteLine("Ошибка: " + ex.Message);
-                }
-            }
-
-            return headers;
-        }*/
-        /*public Dictionary<int, List<string>> GetDisciplinesHeaders(string connectionString, string tableName)
-        {
-            Dictionary<int, List<string>> headers = new Dictionary<int, List<string>>();
-
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-
-                    // Получаем метаданные о столбцах таблицы
-                    System.Data.DataTable schemaTable = connection.GetSchema("Columns", new string[] { null, null, tableName });
-
-                    // Обрабатываем полученные данные
-                    foreach (DataRow row in schemaTable.Rows)
-                    {
-                        string columnName = row["COLUMN_NAME"].ToString();
-
-                        // Определяем номер класса из индекса строки в таблице
-                        int classNumber = schemaTable.Rows.IndexOf(row) + 1;
-
-                        // Добавляем имя столбца в список заголовков для текущего номера класса
-                        if (!headers.ContainsKey(classNumber))
-                            headers[classNumber] = new List<string>();
-
-                        headers[classNumber].Add(columnName);
-                    }
-                }
-                catch (OleDbException ex)
-                {
-                    Console.WriteLine("Ошибка: " + ex.Message);
-                }
-            }
-
-            return headers;
-        }*/
-        /*public Dictionary<int, List<string>> GetDisciplinesHeaders(string connectionString, string tableName)
-        {
-            Dictionary<int, List<string>> headers = new Dictionary<int, List<string>>();
-
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-
-                    // Получаем метаданные о столбцах таблицы
-                    System.Data.DataTable schemaTable = connection.GetSchema("Columns", new string[] { null, null, tableName });
-
-                    // Счетчик для определения номера строки
-                    int rowNumber = 1;
-                    if (tableName == "Disciplines5_9") rowNumber += 4;
-                    if (tableName == "Disciplines10_11") rowNumber += 9;
-
-                    // Обрабатываем полученные данные
-                    foreach (DataRow row in schemaTable.Rows)
-                    {
-                        string columnName = row["COLUMN_NAME"].ToString();
-
-                        // Добавляем имя столбца в список заголовков для текущего номера строки
-                        if (!headers.ContainsKey(rowNumber))
-                        {
-                            headers[rowNumber] = new List<string>();
-                            if (columnName != "Class")
-                                headers[rowNumber].Add(columnName);
-                        }
-
-                        // Добавляем в список заголовков все поля, кроме "Class"
-
-                        // Увеличиваем счетчик номера строки
-                        rowNumber++;
-                    }
-                }
-                catch (OleDbException ex)
-                {
-                    Console.WriteLine("Ошибка: " + ex.Message);
-                }
-            }
-
-            return headers;
-        }*/
-        public Dictionary<int, List<string>> GetDisciplinesHeaders(string connectionString, string tableName, int classNumber)
-        {
-            Dictionary<int, List<string>> headers = new Dictionary<int, List<string>>();
-
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-
-                    // Получаем метаданные о столбцах таблицы
-                    System.Data.DataTable schemaTable = connection.GetSchema("Columns", new string[] { null, null, tableName });
-
-                    // Переменная для отслеживания номера строки (класса)
-
-                    // Обрабатываем полученные данные
-                    foreach (DataRow row in schemaTable.Rows)
-                    {
-                        string columnName = row["COLUMN_NAME"].ToString();
-
-                        // Пропускаем столбец "Class"
-                        if (columnName == "Class")
-                            continue;
-
-                        // Добавляем имя столбца в список заголовков для текущего номера класса
-                        if (!headers.ContainsKey(classNumber))
-                            headers[classNumber] = new List<string>();
-
-                        // Добавляем в список заголовков все поля, кроме столбца "Class"
-                        if (columnName != "Class")
-                            headers[classNumber].Add(columnName);
-
-                        // Увеличиваем номер строки (класса)
                     }
                 }
                 catch (OleDbException ex)
@@ -773,7 +628,8 @@ namespace schedule
             return headers;
         }
 
-    }
+        
+        }
 
 }
 
