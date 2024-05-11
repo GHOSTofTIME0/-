@@ -35,16 +35,16 @@
             this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.печатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.добавитьПредметToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.удалитьПредметToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.добавитьПредметToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.предметыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.удалитьУчителяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.копироватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.вставитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.копироватьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.вставитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.предметыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.удалитьУчителяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,17 +94,29 @@
             this.удалитьУчителяToolStripMenuItem});
             this.правкаToolStripMenuItem.Name = "правкаToolStripMenuItem";
             // 
+            // удалитьПредметToolStripMenuItem
+            // 
+            resources.ApplyResources(this.удалитьПредметToolStripMenuItem, "удалитьПредметToolStripMenuItem");
+            this.удалитьПредметToolStripMenuItem.Name = "удалитьПредметToolStripMenuItem";
+            this.удалитьПредметToolStripMenuItem.Click += new System.EventHandler(this.удалитьПредметToolStripMenuItem_Click);
+            // 
             // добавитьПредметToolStripMenuItem
             // 
             resources.ApplyResources(this.добавитьПредметToolStripMenuItem, "добавитьПредметToolStripMenuItem");
             this.добавитьПредметToolStripMenuItem.Name = "добавитьПредметToolStripMenuItem";
             this.добавитьПредметToolStripMenuItem.Click += new System.EventHandler(this.добавитьПредметToolStripMenuItem_Click);
             // 
-            // удалитьПредметToolStripMenuItem
+            // предметыToolStripMenuItem
             // 
-            resources.ApplyResources(this.удалитьПредметToolStripMenuItem, "удалитьПредметToolStripMenuItem");
-            this.удалитьПредметToolStripMenuItem.Name = "удалитьПредметToolStripMenuItem";
-            this.удалитьПредметToolStripMenuItem.Click += new System.EventHandler(this.удалитьПредметToolStripMenuItem_Click);
+            resources.ApplyResources(this.предметыToolStripMenuItem, "предметыToolStripMenuItem");
+            this.предметыToolStripMenuItem.Name = "предметыToolStripMenuItem";
+            this.предметыToolStripMenuItem.Click += new System.EventHandler(this.предметыToolStripMenuItem_Click);
+            // 
+            // удалитьУчителяToolStripMenuItem
+            // 
+            resources.ApplyResources(this.удалитьУчителяToolStripMenuItem, "удалитьУчителяToolStripMenuItem");
+            this.удалитьУчителяToolStripMenuItem.Name = "удалитьУчителяToolStripMenuItem";
+            this.удалитьУчителяToolStripMenuItem.Click += new System.EventHandler(this.удалитьУчителяToolStripMenuItem_Click);
             // 
             // оПрограммеToolStripMenuItem
             // 
@@ -130,18 +142,6 @@
             // 
             resources.ApplyResources(this.вставитьToolStripMenuItem1, "вставитьToolStripMenuItem1");
             this.вставитьToolStripMenuItem1.Name = "вставитьToolStripMenuItem1";
-            // 
-            // предметыToolStripMenuItem
-            // 
-            resources.ApplyResources(this.предметыToolStripMenuItem, "предметыToolStripMenuItem");
-            this.предметыToolStripMenuItem.Name = "предметыToolStripMenuItem";
-            this.предметыToolStripMenuItem.Click += new System.EventHandler(this.предметыToolStripMenuItem_Click);
-            // 
-            // удалитьУчителяToolStripMenuItem
-            // 
-            resources.ApplyResources(this.удалитьУчителяToolStripMenuItem, "удалитьУчителяToolStripMenuItem");
-            this.удалитьУчителяToolStripMenuItem.Name = "удалитьУчителяToolStripMenuItem";
-            this.удалитьУчителяToolStripMenuItem.Click += new System.EventHandler(this.удалитьУчителяToolStripMenuItem_Click);
             // 
             // Form1
             // 

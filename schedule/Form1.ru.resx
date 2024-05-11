@@ -127,14 +127,26 @@
   <data name="печатьToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>129, 22</value>
   </data>
+  <data name="удалитьПредметToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 22</value>
+  </data>
   <data name="удалитьПредметToolStripMenuItem.Text" xml:space="preserve">
     <value>удалить предмет</value>
+  </data>
+  <data name="добавитьПредметToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 22</value>
   </data>
   <data name="добавитьПредметToolStripMenuItem.Text" xml:space="preserve">
     <value>добавить предмет</value>
   </data>
+  <data name="предметыToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 22</value>
+  </data>
   <data name="предметыToolStripMenuItem.Text" xml:space="preserve">
     <value>добавить учителя</value>
+  </data>
+  <data name="удалитьУчителяToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 22</value>
   </data>
   <data name="удалитьУчителяToolStripMenuItem.Text" xml:space="preserve">
     <value>удалить учителя</value>
