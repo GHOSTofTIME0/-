@@ -19,13 +19,13 @@ namespace schedule
     public partial class Form1 : Form
     {
         private TabControl tab;
-        private string[] daysOfWeek = { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" };
+        private readonly string[] daysOfWeek = { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" };
         private string outputPath;
 
         private static string projectPath = Directory.GetParent(System.Windows.Forms.Application.StartupPath).Parent.Parent.FullName;
-        private string SubjectFilePath = Path.Combine(projectPath, "source", "предметы.txt");
+        private readonly string SubjectFilePath = Path.Combine(projectPath, "source", "предметы.txt");
 
-        private string teachersFilePath = Path.Combine(projectPath, "source", "учителя.txt");
+        private readonly string teachersFilePath = Path.Combine(projectPath, "source", "учителя.txt");
 
         private readonly string connectString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\bin\\Debug\\shedule.mdb;";
         public Form1()
@@ -72,7 +72,7 @@ namespace schedule
             for (int i = 0; i < 11; i++)
             {
                 TabPage tp = new TabPage(Convert.ToString(i + 1));
-                DataGridView Grid = CreateDataGridView(i+1, 7);
+                DataGridView Grid = CreateDataGridView(i+1);
                 tp.Controls.Add(Grid);
                 tab.TabPages.Add(tp);
 
@@ -97,7 +97,7 @@ namespace schedule
             }
         }
 
-        private DataGridView CreateDataGridView(int classNumber, int maxRowsCount)
+        private DataGridView CreateDataGridView(int classNumber)
         {
             DataGridView dataGridView = new DataGridView();
             dataGridView.Dock = DockStyle.Fill;
@@ -106,6 +106,12 @@ namespace schedule
             rowNumerColumn.HeaderText = "#";
             dataGridView.Columns.Add(rowNumerColumn);
             dataGridView.AllowUserToAddRows = false;
+            int maxRowsCount = 0;
+            if(classNumber <=4)
+            {
+                maxRowsCount = 5;
+            }
+            else maxRowsCount= 7;
 
             for (int rowIndex = 1; rowIndex <= maxRowsCount; rowIndex++)
             {
@@ -394,27 +400,99 @@ namespace schedule
             }
         }
 
-        private void GenerateWordDocument()
+        private void GenerateWordDocuments()
         {
             try
             {
                 string projectPath = Directory.GetParent(System.Windows.Forms.Application.StartupPath).Parent.Parent.FullName;
-                string templatePath = Path.Combine(projectPath, "source", "расписание 2023-2024.docx");
+                string templatePath1_4 = Path.Combine(projectPath, "source", "началка.docx");
+                string templatePath5_11 = Path.Combine(projectPath, "source", "расписание 2023-2024.docx");
+
+                GenerateWordDocument(templatePath1_4, 0, 4); // Заполняем "началка.docx" на основе первых четырех TabControl
+                GenerateWordDocument(templatePath5_11, 4, tab.TabPages.Count); // Заполняем "расписание 2023-2024.docx" на основе остальных TabControl
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void GenerateWordDocument(string templatePath, int startTabIndex, int endTabIndex)
+        {
+            try
+            {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "Документ Word (*.doc)|*.doc";
+                saveFileDialog.Filter = "Документ Word (*.docx)|*.docx";
                 saveFileDialog.Title = "Сохранить документ Word";
-                saveFileDialog.FileName = $"{this.Text}.doc";
+                saveFileDialog.FileName = $"{Path.GetFileNameWithoutExtension(templatePath)}_{startTabIndex + 1}-{endTabIndex}.docx"; // Имя файла на основе индексов вкладок
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    string outputPath = @saveFileDialog.FileName;
-                    MessageBox.Show(outputPath);
+                    string outputPath = saveFileDialog.FileName;
                     File.Copy(templatePath, outputPath, true);
 
                     using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(outputPath, true))
                     {
                         ClearWordDocument(wordDoc);
-                        for (int tabIndex = 0; tabIndex < tab.TabPages.Count; tabIndex++)
+
+                        for (int tabIndex = startTabIndex; tabIndex < endTabIndex; tabIndex++)
+                        {
+                            var tabPage = tab.TabPages[tabIndex];
+                            int classNumber = int.Parse(tabPage.Text);
+                            string wordClassNumber = classNumber.ToWords();
+
+                            foreach (System.Windows.Forms.Control control in tabPage.Controls)
+                            {
+                                if (control is DataGridView dataGridView)
+                                {
+                                    for (int rowIndex = 0; rowIndex < dataGridView.Rows.Count - 1; rowIndex++)
+                                    {
+                                        for (int columnIndex = 1; columnIndex < dataGridView.Columns.Count; columnIndex++)
+                                        {
+                                            string cellValue = dataGridView[columnIndex, rowIndex].Value?.ToString();
+                                            string bookmarkName = GetBookmarkName(wordClassNumber, columnIndex, rowIndex + 1);
+
+                                            ReplaceContentControlText(wordDoc, bookmarkName, cellValue);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    MessageBox.Show($"Документ успешно создан и сохранен по пути: {outputPath}", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else MessageBox.Show("Отменено пользователем", "Отмена", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
+        /*private void GenerateWordDocument()
+        {
+            try
+            {
+                string projectPath = Directory.GetParent(System.Windows.Forms.Application.StartupPath).Parent.Parent.FullName;
+                string templatePath5_11 = Path.Combine(projectPath, "source", "расписание 2023-2024.docx");
+                string templatePath1_4 = Path.Combine(projectPath, "source", "началка.docx");
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Документ Word (*.doc)|*.doc";
+                saveFileDialog.Title = "Сохранить документ Word";
+                saveFileDialog.FileName = $"{this.Text}.doc";
+
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string outputPath = @saveFileDialog.FileName;
+                    MessageBox.Show(outputPath);
+                    File.Copy(templatePath5_11, outputPath, true);
+
+                    using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(outputPath, true))
+                    {
+                        ClearWordDocument(wordDoc);
+                        for (int tabIndex = 4; tabIndex < tab.TabPages.Count; tabIndex++)
                         {
                             var tabPage = tab.TabPages[tabIndex];
 
@@ -448,8 +526,42 @@ namespace schedule
             {
                 MessageBox.Show(ex.Message);
             }
-        }
+        }*/
 
+        /* if(saveFileDialog.ShowDialog() == DialogResult.OK)
+         {
+             string outputPath = saveFileDialog.FileName;
+             File.Copy(templatePath1_4, outputPath, true );
+
+             using(WordprocessingDocument wordDoc = WordprocessingDocument.Open(outputPath, true))
+             {
+                 ClearWordDocument(wordDoc);
+                 for(int tabIndex = 0; tabIndex < tab.TabPages.Count; tabIndex++)
+                 {
+                     var tabPage = tab.TabPages[tabIndex];
+                     int classNumber = int.Parse(tabPage.Text);
+                     string wordClassNumber = classNumber.ToWords();
+
+                     foreach(System.Windows.Forms.Control control in tabPage.Controls)
+                     {
+                         if(control is DataGridView dataGridView)
+                         {
+                             for(int rowIndex = 0; rowIndex < dataGridView.Rows.Count - 1; rowIndex++)
+                             {
+                                 for(int columnIndex = 1; columnIndex < dataGridView.Columns.Count; columnIndex++)
+                                 {
+                                     string cellValue = dataGridView[columnIndex, rowIndex].Value?.ToString();
+                                     string bookmarkName = GetBookmarkName(wordClassNumber, columnIndex, rowIndex + 1);
+
+                                     ReplaceContentControlText(wordDoc, bookmarkName, cellValue);
+                                 }
+                             }
+                         }
+                     }
+                 }
+             }
+         }
+         else MessageBox.Show("Отменено пользователем", "Отмена", MessageBoxButtons.OK, MessageBoxIcon.Information);*/
         private string CleanPath(string path)
         {
             string invalidFileNameChars = new string(Path.GetInvalidFileNameChars());
@@ -506,7 +618,7 @@ namespace schedule
         {
             if (tab != null && tab.TabCount > 0)
             {
-                GenerateWordDocument();
+                GenerateWordDocuments();
 
             }
             else MessageBox.Show("Чтобы сохранить файл его надобно создать", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
