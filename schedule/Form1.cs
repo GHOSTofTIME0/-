@@ -19,6 +19,7 @@ namespace schedule
     public partial class Form1 : Form
     {
         private TabControl tab;
+        private DataGridView dataGridView1;
         private readonly string[] daysOfWeek = { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" };
         private string outputPath;
 
@@ -160,6 +161,13 @@ namespace schedule
                 }
             }
 
+
+            dataGridView.EditingControlShowing += dataGridView_EditingControlShowing;
+            dataGridView.CellEndEdit += dataGridView_CellEndEdit;
+            dataGridView.CellValidating += DataGridView_CellValidating;
+            dataGridView.CellValueChanged += DataGridView_CellValueChanged;
+            dataGridView1 = dataGridView;
+            enabledMenuItems();
             // Остальной код обработки событий и т.д.
 
             return dataGridView;
@@ -177,7 +185,7 @@ namespace schedule
             {
                 subjectsListForm.ShowDialog();
             }
-            UpdateComboBoxItems();
+            /*UpdateComboBoxItems();*/
         }
 
         private void добавитьПредметToolStripMenuItem_Click(object sender, EventArgs e)
@@ -189,47 +197,15 @@ namespace schedule
                 {
                     string newText = inputForm.nameText;
                     int difficulty = Convert.ToInt32(inputForm.difficulty);
-                    AddSubjectWithDifficultyToFile(newText, difficulty);
+
                 }
             }
-            UpdateComboBoxItems();
+            /*UpdateComboBoxItems();*/
         }
 
-        private void AddSubjectWithDifficultyToFile(string subject, int difficulty)
-        {
-            string lineToAdd = $"{subject}:{difficulty}";
-            File.AppendAllText(SubjectFilePath, lineToAdd+ "\r\n");
-            UpdateComboBoxItems();
-        }
 
-        private Dictionary<string, int> ReadSubjectsAndDifficultiesFromFile()
-        {
-            Dictionary<string, int> subjectsAndDifficulty = new Dictionary<string, int>();
 
-            if(File.Exists(SubjectFilePath))
-            {
-                string[] lines = File.ReadAllLines(SubjectFilePath);
-
-                foreach (string line in lines)
-                {
-                    string[] parts = line.Split(':');
-
-                    if(parts.Length== 2)
-                    {
-                        string subject = parts[0];
-                        int difficulty;
-
-                        if (int.TryParse(parts[1], out difficulty))
-                        {
-                            subjectsAndDifficulty.Add(subject, difficulty);
-                        }
-                        else MessageBox.Show("Неверно введена сложность", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    else MessageBox.Show("Неверный формат строки", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            return subjectsAndDifficulty;
-        }
+        
         
 
         private void disabledMenuItems()
@@ -258,7 +234,7 @@ namespace schedule
                     {
                         File.AppendAllText(teachersFilePath, lineToEnter + "\r\n");
                     }
-                    UpdateComboBoxItems();
+                    /*UpdateComboBoxItems();*/
                 }
             }
         }
@@ -269,47 +245,14 @@ namespace schedule
             {
                 inputForm.ShowDialog();
             }
-            UpdateComboBoxItems();
+            /*UpdateComboBoxItems();*/
         }
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private void dataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
-        {
-            DataGridView dataGridView = (DataGridView)sender;
 
-            for (int i = 0; i < e.RowCount; i++)
-            {
-                dataGridView.Rows[0].Cells[0].Value = "1";
-                dataGridView.Rows[e.RowIndex + i].Cells[0].Value = (e.RowIndex + i + 1).ToString();
-            }
-        }
-
-        private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.ColumnIndex > 0 && e.RowIndex >= 0)
-            {
-                DataGridView dataGridView = (DataGridView)sender;
-
-                // Проверяем, что текущая ячейка является ячейкой типа DataGridViewComboBoxCell
-                if (dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex] is DataGridViewComboBoxCell comboBoxCell)
-                {
-                    // Проверяем, что Items в комбо-боксе пусты, и, если да, добавляем элементы
-                    if (comboBoxCell.Items.Count == 0)
-                    {
-                        comboBoxCell.Items.AddRange(GetSubjectList());
-                    }
-
-                    // Начинаем редактирование ячейки
-                    dataGridView.BeginEdit(true);
-
-                    // Устанавливаем стиль отображения для комбо-бокса
-                    comboBoxCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.DropDownButton;
-                }
-            }
-        }
 
         //Проверка на ввод DataGridView
 
@@ -344,35 +287,63 @@ namespace schedule
             }
         }
 
+
+        private void DataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (dataGridView1.CurrentCell is DataGridViewComboBoxCell comboBoxCell && e.ColumnIndex % 2 == 0 && e.RowIndex >= 0)
+            {
+                string selectedSubject = e.FormattedValue.ToString();
+                string selectedDay = dataGridView1.Columns[e.ColumnIndex].HeaderText;
+
+                // Проверяем, есть ли выбранный предмет в других строках с таким же днем недели
+                for (int rowIndex = 0; rowIndex < dataGridView1.Rows.Count; rowIndex++)
+                {
+                    if (rowIndex != e.RowIndex) // Пропускаем текущую строку
+                    {
+                        DataGridViewComboBoxCell otherComboBoxCell = (DataGridViewComboBoxCell)dataGridView1.Rows[rowIndex].Cells[e.ColumnIndex];
+                        if (otherComboBoxCell.Value != null && otherComboBoxCell.Value.ToString() == selectedSubject)
+                        {
+                            MessageBox.Show($"Предмет '{selectedSubject}' уже назначен для другого класса в день '{selectedDay}'", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            e.Cancel = true; // Отменяем изменение
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void DataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex % 2 == 0 && e.RowIndex >= 0) // Проверяем только для комбинированных столбцов и строк данных (а не заголовков)
+            {
+                DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                string selectedSubject = currentCell.Value?.ToString();
+                string selectedDay = dataGridView1.Columns[e.ColumnIndex].HeaderText;
+
+                // Проверяем, есть ли выбранный предмет в других строках с таким же днем недели
+                for (int rowIndex = 0; rowIndex < dataGridView1.Rows.Count; rowIndex++)
+                {
+                    if (rowIndex != e.RowIndex) // Пропускаем текущую строку
+                    {
+                        DataGridViewComboBoxCell otherComboBoxCell = (DataGridViewComboBoxCell)dataGridView1.Rows[rowIndex].Cells[e.ColumnIndex];
+                        if (otherComboBoxCell.Value != null && otherComboBoxCell.Value.ToString() == selectedSubject)
+                        {
+                            MessageBox.Show($"Предмет '{selectedSubject}' уже назначен для другого класса в день '{selectedDay}'", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            // Сбрасываем значение текущей ячейки обратно на пустое значение
+                            currentCell.Value = null;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         /////////////////////////////////////////////////////////
 
 
-        private List<string> GetSubjectList()
-        {
-            return new List<string> { "Математика", "Химия", "Физика", "Литература", "История", "География" };
-        }
 
-        private string[] GetSubjectArray()
-        {
-            string projectPath = Directory.GetParent(System.Windows.Forms.Application.StartupPath).Parent.Parent.FullName;
-            string templatePath = Path.Combine(projectPath, "source", "предметы.txt");
 
-            if (File.Exists(templatePath))
-            {
-                return File.ReadAllLines(templatePath);
-            }
-            return new string[0];
-        }
 
-        private void dataGridView_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
-        {
-            DataGridView dataGridView = (DataGridView)sender;
-
-            for (int i = e.RowIndex; i < dataGridView.Rows.Count; i++)
-            {
-                dataGridView.Rows[i].Cells[0].Value = (i + 1).ToString();
-            }
-        }
 
 
 
@@ -470,98 +441,7 @@ namespace schedule
         }
 
 
-        /*private void GenerateWordDocument()
-        {
-            try
-            {
-                string projectPath = Directory.GetParent(System.Windows.Forms.Application.StartupPath).Parent.Parent.FullName;
-                string templatePath5_11 = Path.Combine(projectPath, "source", "расписание 2023-2024.docx");
-                string templatePath1_4 = Path.Combine(projectPath, "source", "началка.docx");
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "Документ Word (*.doc)|*.doc";
-                saveFileDialog.Title = "Сохранить документ Word";
-                saveFileDialog.FileName = $"{this.Text}.doc";
-
-
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    string outputPath = @saveFileDialog.FileName;
-                    MessageBox.Show(outputPath);
-                    File.Copy(templatePath5_11, outputPath, true);
-
-                    using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(outputPath, true))
-                    {
-                        ClearWordDocument(wordDoc);
-                        for (int tabIndex = 4; tabIndex < tab.TabPages.Count; tabIndex++)
-                        {
-                            var tabPage = tab.TabPages[tabIndex];
-
-                            int classNumber = int.Parse(tabPage.Text);
-                            string wordClassNumber = classNumber.ToWords();
-
-
-                            foreach (System.Windows.Forms.Control control in tabPage.Controls)
-                            {
-                                if (control is DataGridView dataGridView)
-                                {
-                                    for (int rowIndex = 0; rowIndex < dataGridView.Rows.Count - 1; rowIndex++)
-                                    {
-                                        for (int columnIndex = 1; columnIndex < dataGridView.Columns.Count; columnIndex++)
-                                        {
-                                            string cellValue = dataGridView[columnIndex, rowIndex].Value?.ToString();
-                                            string bookmarkName = GetBookmarkName(wordClassNumber, columnIndex, rowIndex + 1);
-
-                                            ReplaceContentControlText(wordDoc, bookmarkName, cellValue);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    MessageBox.Show(outputPath);
-                }
-                else MessageBox.Show("Отменено пользователем", "Отмена", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }*/
-
-        /* if(saveFileDialog.ShowDialog() == DialogResult.OK)
-         {
-             string outputPath = saveFileDialog.FileName;
-             File.Copy(templatePath1_4, outputPath, true );
-
-             using(WordprocessingDocument wordDoc = WordprocessingDocument.Open(outputPath, true))
-             {
-                 ClearWordDocument(wordDoc);
-                 for(int tabIndex = 0; tabIndex < tab.TabPages.Count; tabIndex++)
-                 {
-                     var tabPage = tab.TabPages[tabIndex];
-                     int classNumber = int.Parse(tabPage.Text);
-                     string wordClassNumber = classNumber.ToWords();
-
-                     foreach(System.Windows.Forms.Control control in tabPage.Controls)
-                     {
-                         if(control is DataGridView dataGridView)
-                         {
-                             for(int rowIndex = 0; rowIndex < dataGridView.Rows.Count - 1; rowIndex++)
-                             {
-                                 for(int columnIndex = 1; columnIndex < dataGridView.Columns.Count; columnIndex++)
-                                 {
-                                     string cellValue = dataGridView[columnIndex, rowIndex].Value?.ToString();
-                                     string bookmarkName = GetBookmarkName(wordClassNumber, columnIndex, rowIndex + 1);
-
-                                     ReplaceContentControlText(wordDoc, bookmarkName, cellValue);
-                                 }
-                             }
-                         }
-                     }
-                 }
-             }
-         }
-         else MessageBox.Show("Отменено пользователем", "Отмена", MessageBoxButtons.OK, MessageBoxIcon.Information);*/
+        
         private string CleanPath(string path)
         {
             string invalidFileNameChars = new string(Path.GetInvalidFileNameChars());
@@ -660,7 +540,7 @@ namespace schedule
             else MessageBox.Show("Нельзя отправлять на печать несуществующий документ", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void UpdateComboBoxItems()
+      /*  private void UpdateComboBoxItems() //потом поменять
         {
             foreach(TabPage tabpage in tab.TabPages)
             {
@@ -680,7 +560,7 @@ namespace schedule
                     }
                 }
             }
-        }
+        }*/
 
        
 
