@@ -78,7 +78,6 @@ namespace schedule
                 tab.TabPages.Add(tp);
 
             }
-
             this.Controls.Add(tab);
 
             // Убедитесь, что Controls.Add(tab) вызывается после добавления вкладок
@@ -107,6 +106,7 @@ namespace schedule
             rowNumerColumn.HeaderText = "#";
             dataGridView.Columns.Add(rowNumerColumn);
             dataGridView.AllowUserToAddRows = false;
+            dataGridView.EditMode = DataGridViewEditMode.EditOnEnter;
             int maxRowsCount = 0;
             if(classNumber <=4)
             {
@@ -140,7 +140,7 @@ namespace schedule
 
                     // Получаем названия полей из таблицы и заполняем ComboBox
                     Dictionary<int, Dictionary<string, int>> headers = GetDisciplinesHeaders(connectString, tableName, classNumberI);
-                    if (headers.ContainsKey(i + 1))
+                    if (headers.ContainsKey(classNumberI))
                     {
                         Dictionary<string, int> classHeaders = headers[classNumberI];
                         foreach (var header in classHeaders)
@@ -164,7 +164,8 @@ namespace schedule
 
             dataGridView.EditingControlShowing += dataGridView_EditingControlShowing;
             dataGridView.CellEndEdit += dataGridView_CellEndEdit;
-            dataGridView.CellValidating += DataGridView_CellValidating;
+            /*dataGridView.CellValidating += DataGridView_CellValidating;*/
+            dataGridView.CurrentCellDirtyStateChanged += DataGridView_CurrentCellDirtyStateChanged;
             dataGridView.CellValueChanged += DataGridView_CellValueChanged;
             dataGridView1 = dataGridView;
             enabledMenuItems();
@@ -212,12 +213,14 @@ namespace schedule
         {
             добавитьПредметToolStripMenuItem.Enabled = false;
             удалитьПредметToolStripMenuItem.Enabled = false;
+            предпросмотрРасписанияToolStripMenuItem.Enabled = false;
         }
 
         private void enabledMenuItems()
         {
             добавитьПредметToolStripMenuItem.Enabled = true;
             удалитьПредметToolStripMenuItem.Enabled = true;
+            предпросмотрРасписанияToolStripMenuItem.Enabled = true;
         }
 
         ////////////////////////////////////добавление/удаление учителей////////////////////////////////////////////////////////////////////
@@ -288,10 +291,13 @@ namespace schedule
         }
 
 
-        private void DataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        /*private void DataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) не работает
         {
-            if (dataGridView1.CurrentCell is DataGridViewComboBoxCell comboBoxCell && e.ColumnIndex % 2 == 0 && e.RowIndex >= 0)
+            if (e.ColumnIndex % 2 == 0 && e.RowIndex >= 0) // Проверяем только ячейки с предметами (четные столбцы)
             {
+                if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex] is DataGridViewComboBoxCell)
+                {
+                DataGridViewComboBoxCell comboBoxCell = (DataGridViewComboBoxCell)dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex];
                 string selectedSubject = e.FormattedValue.ToString();
                 string selectedDay = dataGridView1.Columns[e.ColumnIndex].HeaderText;
 
@@ -309,29 +315,43 @@ namespace schedule
                         }
                     }
                 }
+
+                }
+            }
+        }*/
+
+
+        private void DataGridView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dataGridView1.IsCurrentCellDirty)
+            {
+                dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
         }
 
-        private void DataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        private void DataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e) //не робит
         {
-            if (e.ColumnIndex % 2 == 0 && e.RowIndex >= 0) // Проверяем только для комбинированных столбцов и строк данных (а не заголовков)
+            if (e.ColumnIndex % 2 == 0 && e.RowIndex >= 0) // Проверяем только ячейки с предметами (четные столбцы)
             {
-                DataGridViewComboBoxCell currentCell = (DataGridViewComboBoxCell)dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                string selectedSubject = currentCell.Value?.ToString();
-                string selectedDay = dataGridView1.Columns[e.ColumnIndex].HeaderText;
-
-                // Проверяем, есть ли выбранный предмет в других строках с таким же днем недели
-                for (int rowIndex = 0; rowIndex < dataGridView1.Rows.Count; rowIndex++)
+                if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex] is DataGridViewComboBoxCell comboBoxCell)
                 {
-                    if (rowIndex != e.RowIndex) // Пропускаем текущую строку
+                    string selectedSubject = comboBoxCell.Value?.ToString();
+                    string selectedDay = dataGridView1.Columns[e.ColumnIndex].HeaderText;
+
+                    // Проверяем, есть ли выбранный предмет в других строках с таким же днем недели
+                    for (int rowIndex = 0; rowIndex < dataGridView1.Rows.Count; rowIndex++)
                     {
-                        DataGridViewComboBoxCell otherComboBoxCell = (DataGridViewComboBoxCell)dataGridView1.Rows[rowIndex].Cells[e.ColumnIndex];
-                        if (otherComboBoxCell.Value != null && otherComboBoxCell.Value.ToString() == selectedSubject)
+                        if (rowIndex != e.RowIndex) // Пропускаем текущую строку
                         {
-                            MessageBox.Show($"Предмет '{selectedSubject}' уже назначен для другого класса в день '{selectedDay}'", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            // Сбрасываем значение текущей ячейки обратно на пустое значение
-                            currentCell.Value = null;
-                            break;
+                            if (dataGridView1.Rows[rowIndex].Cells[e.ColumnIndex] is DataGridViewComboBoxCell otherComboBoxCell)
+                            {
+                                if (otherComboBoxCell.Value != null && otherComboBoxCell.Value.ToString() == selectedSubject)
+                                {
+                                    MessageBox.Show($"Предмет '{selectedSubject}' уже назначен для другого класса в день '{selectedDay}'", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    comboBoxCell.Value = null; // Сбрасываем значение текущей ячейки
+                                    return; // Прерываем выполнение метода
+                                }
+                            }
                         }
                     }
                 }
@@ -509,7 +529,7 @@ namespace schedule
 
         //Печать документа
 
-        private void PrintWordDocument()
+        private void PrintWordDocument() // не робит
         {
             try
             {
@@ -620,8 +640,13 @@ namespace schedule
             return headers;
         }
 
-        
+        private void предпросмотрРасписанияToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            previewForm previewForm = new previewForm();
+            previewForm.LoadSchedule(tab, daysOfWeek);
+            previewForm.ShowDialog();
         }
+    }
 
 }
 

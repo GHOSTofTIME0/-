@@ -75,3 +75,4 @@ C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.Form1.ru.resour
 C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\ru\schedule.resources.dll
 C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.Form2.resources
 C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.Form4.resources
+C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.previewForm.resources

@@ -45,6 +45,7 @@
             this.вставитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.копироватьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.вставитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.предпросмотрРасписанияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,7 +64,8 @@
             this.создатьToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.создатьToolStripMenuItem1,
             this.сохранитьToolStripMenuItem,
-            this.печатьToolStripMenuItem});
+            this.печатьToolStripMenuItem,
+            this.предпросмотрРасписанияToolStripMenuItem});
             this.создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
             // 
             // создатьToolStripMenuItem1
@@ -143,6 +145,12 @@
             resources.ApplyResources(this.вставитьToolStripMenuItem1, "вставитьToolStripMenuItem1");
             this.вставитьToolStripMenuItem1.Name = "вставитьToolStripMenuItem1";
             // 
+            // предпросмотрРасписанияToolStripMenuItem
+            // 
+            resources.ApplyResources(this.предпросмотрРасписанияToolStripMenuItem, "предпросмотрРасписанияToolStripMenuItem");
+            this.предпросмотрРасписанияToolStripMenuItem.Name = "предпросмотрРасписанияToolStripMenuItem";
+            this.предпросмотрРасписанияToolStripMenuItem.Click += new System.EventHandler(this.предпросмотрРасписанияToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -177,6 +185,7 @@
         private System.Windows.Forms.ToolStripMenuItem удалитьПредметToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem предметыToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem удалитьУчителяToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem предпросмотрРасписанияToolStripMenuItem;
     }
 }
 

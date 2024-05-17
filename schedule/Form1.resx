@@ -166,6 +166,9 @@
   <data name="&gt;&gt;печатьToolStripMenuItem.Name" xml:space="preserve">
     <value>печатьToolStripMenuItem</value>
   </data>
+  <data name="предпросмотрРасписанияToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>208, 22</value>
+  </data>
   <data name="копироватьToolStripMenuItem1.Text" xml:space="preserve">
     <value>Копировать</value>
   </data>
@@ -193,9 +196,8 @@
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="menuStrip1.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="создатьToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>45, 20</value>
   </data>
   <data name="&gt;&gt;создатьToolStripMenuItem.Name" xml:space="preserve">
     <value>создатьToolStripMenuItem</value>
@@ -232,6 +234,9 @@
   </data>
   <data name="сохранитьToolStripMenuItem.Text" xml:space="preserve">
     <value>Сохранить</value>
+  </data>
+  <data name="&gt;&gt;предпросмотрРасписанияToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;вставитьToolStripMenuItem1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -308,17 +313,21 @@
   <data name="&gt;&gt;вставитьToolStripMenuItem1.Name" xml:space="preserve">
     <value>вставитьToolStripMenuItem1</value>
   </data>
+  <data name="&gt;&gt;предпросмотрРасписанияToolStripMenuItem.Name" xml:space="preserve">
+    <value>предпросмотрРасписанияToolStripMenuItem</value>
+  </data>
   <data name="&gt;&gt;предметыToolStripMenuItem.Name" xml:space="preserve">
     <value>предметыToolStripMenuItem</value>
   </data>
   <data name="сохранитьToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>180, 22</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="$this.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="создатьToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>45, 20</value>
+  <data name="menuStrip1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
   <data name="копироватьToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>135, 22</value>
