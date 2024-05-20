@@ -70,10 +70,10 @@ namespace schedule
             tab.Size = new Size((System.Drawing.Point)this.Size);
 
 
-            for (int i = 0; i < 11; i++)
+            for (int i = 1; i < 12; i++)
             {
-                TabPage tp = new TabPage(Convert.ToString(i + 1));
-                DataGridView Grid = CreateDataGridView(i+1);
+                TabPage tp = new TabPage(Convert.ToString(i));
+                DataGridView Grid = CreateDataGridView(i);
                 tp.Controls.Add(Grid);
                 tab.TabPages.Add(tp);
 
@@ -84,6 +84,9 @@ namespace schedule
             Controls.Add(tab);
             tab.Location = new System.Drawing.Point(0, menuStrip1.Bottom);
         }
+
+        
+
 
         private void ClearTabs()
         {
@@ -139,10 +142,10 @@ namespace schedule
                         tableName = "Disciplines10_11";
 
                     // Получаем названия полей из таблицы и заполняем ComboBox
-                    Dictionary<int, Dictionary<string, int>> headers = GetDisciplinesHeaders(connectString, tableName, classNumberI);
-                    if (headers.ContainsKey(classNumberI))
+                    Dictionary<int, Dictionary<string, int>> headers = GetDisciplinesHeaders(connectString, tableName, classNumber);
+                    if (headers.ContainsKey(classNumber))
                     {
-                        Dictionary<string, int> classHeaders = headers[classNumberI];
+                        Dictionary<string, int> classHeaders = headers[classNumber];
                         foreach (var header in classHeaders)
                         {
                             if (header.Value != 0)
@@ -291,34 +294,7 @@ namespace schedule
         }
 
 
-        /*private void DataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) не работает
-        {
-            if (e.ColumnIndex % 2 == 0 && e.RowIndex >= 0) // Проверяем только ячейки с предметами (четные столбцы)
-            {
-                if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex] is DataGridViewComboBoxCell)
-                {
-                DataGridViewComboBoxCell comboBoxCell = (DataGridViewComboBoxCell)dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                string selectedSubject = e.FormattedValue.ToString();
-                string selectedDay = dataGridView1.Columns[e.ColumnIndex].HeaderText;
-
-                // Проверяем, есть ли выбранный предмет в других строках с таким же днем недели
-                for (int rowIndex = 0; rowIndex < dataGridView1.Rows.Count; rowIndex++)
-                {
-                    if (rowIndex != e.RowIndex) // Пропускаем текущую строку
-                    {
-                        DataGridViewComboBoxCell otherComboBoxCell = (DataGridViewComboBoxCell)dataGridView1.Rows[rowIndex].Cells[e.ColumnIndex];
-                        if (otherComboBoxCell.Value != null && otherComboBoxCell.Value.ToString() == selectedSubject)
-                        {
-                            MessageBox.Show($"Предмет '{selectedSubject}' уже назначен для другого класса в день '{selectedDay}'", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            e.Cancel = true; // Отменяем изменение
-                            break;
-                        }
-                    }
-                }
-
-                }
-            }
-        }*/
+       
 
 
         private void DataGridView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
@@ -329,27 +305,39 @@ namespace schedule
             }
         }
 
-        private void DataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e) //не робит
+        private void DataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex % 2 == 0 && e.RowIndex >= 0) // Проверяем только ячейки с предметами (четные столбцы)
+            if (e.ColumnIndex % 2 != 0 && e.RowIndex >= 0) // Проверяем только ячейки с предметами (четные столбцы)
             {
-                if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex] is DataGridViewComboBoxCell comboBoxCell)
-                {
-                    string selectedSubject = comboBoxCell.Value?.ToString();
-                    string selectedDay = dataGridView1.Columns[e.ColumnIndex].HeaderText;
+                DataGridView currentDataGridView = (DataGridView)sender;
+                DataGridViewComboBoxCell comboBoxCell = currentDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex] as DataGridViewComboBoxCell;
+                string selectedSubject = comboBoxCell?.Value?.ToString();
+                string selectedDay = currentDataGridView.Columns[e.ColumnIndex].HeaderText;
 
-                    // Проверяем, есть ли выбранный предмет в других строках с таким же днем недели
-                    for (int rowIndex = 0; rowIndex < dataGridView1.Rows.Count; rowIndex++)
+                if (selectedSubject != null)
+                {
+                    // Проходим по всем вкладкам
+                    foreach (TabPage tabPage in tab.TabPages)
                     {
-                        if (rowIndex != e.RowIndex) // Пропускаем текущую строку
+                        DataGridView dataGridView = tabPage.Controls[0] as DataGridView;
+                        string classNumber = tabPage.Text;
+
+                        if (dataGridView != null)
                         {
-                            if (dataGridView1.Rows[rowIndex].Cells[e.ColumnIndex] is DataGridViewComboBoxCell otherComboBoxCell)
+                            // Проверяем все строки данного DataGridView
+                            for (int rowIndex = 0; rowIndex < dataGridView.Rows.Count; rowIndex++)
                             {
-                                if (otherComboBoxCell.Value != null && otherComboBoxCell.Value.ToString() == selectedSubject)
+                                if (dataGridView.Rows[rowIndex].Cells[e.ColumnIndex] is DataGridViewComboBoxCell otherComboBoxCell)
                                 {
-                                    MessageBox.Show($"Предмет '{selectedSubject}' уже назначен для другого класса в день '{selectedDay}'", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    comboBoxCell.Value = null; // Сбрасываем значение текущей ячейки
-                                    return; // Прерываем выполнение метода
+                                    if (dataGridView != currentDataGridView || rowIndex != e.RowIndex) // Пропускаем текущую строку в текущем DataGridView
+                                    {
+                                        if (otherComboBoxCell.Value != null && otherComboBoxCell.Value.ToString() == selectedSubject)
+                                        {
+                                            MessageBox.Show($"Предмет '{selectedSubject}' уже назначен для {classNumber} класса в день '{selectedDay}'", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                            comboBoxCell.Value = null; // Сбрасываем значение текущей ячейки
+                                            return; // Прерываем выполнение метода
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -560,29 +548,29 @@ namespace schedule
             else MessageBox.Show("Нельзя отправлять на печать несуществующий документ", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-      /*  private void UpdateComboBoxItems() //потом поменять
-        {
-            foreach(TabPage tabpage in tab.TabPages)
-            {
-                foreach(System.Windows.Forms.Control control in tabpage.Controls)
-                {
-                    if(control is DataGridView dataGridView)
-                    {
-                        foreach(DataGridViewRow row in dataGridView.Rows)
-                        {
-                            for(int i = 1; i < row.Cells.Count; i += 2)
-                            {
-                                DataGridViewComboBoxCell comboBoxSell = (DataGridViewComboBoxCell)row.Cells[i];
-                                comboBoxSell.Items.Clear();
-                                comboBoxSell.Items.AddRange(GetSubjectArray());
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
+        /*  private void UpdateComboBoxItems() //потом поменять
+          {
+              foreach(TabPage tabpage in tab.TabPages)
+              {
+                  foreach(System.Windows.Forms.Control control in tabpage.Controls)
+                  {
+                      if(control is DataGridView dataGridView)
+                      {
+                          foreach(DataGridViewRow row in dataGridView.Rows)
+                          {
+                              for(int i = 1; i < row.Cells.Count; i += 2)
+                              {
+                                  DataGridViewComboBoxCell comboBoxSell = (DataGridViewComboBoxCell)row.Cells[i];
+                                  comboBoxSell.Items.Clear();
+                                  comboBoxSell.Items.AddRange(GetSubjectArray());
+                              }
+                          }
+                      }
+                  }
+              }
+          }*/
 
-       
+
 
         private Dictionary<int, Dictionary<string, int>> GetDisciplinesHeaders(string connectionString, string tableName, int classNumberI) // Доделать, баги ебобаные
         {
@@ -605,13 +593,19 @@ namespace schedule
                             {
 
                                 int classNumber = Convert.ToInt32(reader["Class"]);
-/*
-                                if (tableName == "Disciplines5_9") classNumber += 4;
-                                if (tableName == "Disciplines10_11") classNumber += 9;*/
+                                if(tableName == "Disciplines5_9")
+                                {
+                                    classNumber += 4;
+                                }
+                                else if (tableName == "Disciplines10_11")
+                                {
+                                    classNumber += 9;
+                                }
+
 
                                 // Создаем словарь для текущего номера класса, если его еще нет
-                                if (!headers.ContainsKey(classNumberI))
-                                    headers[classNumberI] = new Dictionary<string, int>();
+                                if (!headers.ContainsKey(classNumber))
+                                    headers[classNumber] = new Dictionary<string, int>();
 
                                 // Получаем имена столбцов кроме "Class"
                                 for (int i = 0; i < reader.FieldCount; i++)
@@ -621,10 +615,8 @@ namespace schedule
                                     {
                                         // Добавляем заголовок и балл в словарь для текущего номера класса
                                         int fieldValue = Convert.ToInt32(reader[columnName]);
-                                        if (fieldValue != 0)
-                                        {
-                                            headers[classNumberI][columnName] = fieldValue;
-                                        }
+                                            headers[classNumber][columnName] = fieldValue;
+                                        
                                     }
                                 }
                             }
@@ -639,6 +631,7 @@ namespace schedule
 
             return headers;
         }
+
 
         private void предпросмотрРасписанияToolStripMenuItem_Click(object sender, EventArgs e)
         {
