@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Runtime.Remoting.Channels;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace schedule
@@ -19,7 +12,7 @@ namespace schedule
         private Button btnDelete;
         private Button btnClose;
 
-        
+
         public Form3()
         {
             InitializeComponent();
@@ -30,8 +23,8 @@ namespace schedule
         private void InitializeComponents()
         {
             listBox = new ListBox();
-            btnDelete= new Button();
-            btnClose= new Button();
+            btnDelete = new Button();
+            btnClose = new Button();
 
             listBox.Dock = DockStyle.Fill;
             btnDelete.Text = "Удалить";
@@ -55,7 +48,7 @@ namespace schedule
 
             listBox.Height = 150;
             btnDelete.Dock = DockStyle.Bottom;
-            btnClose.Dock= DockStyle.Bottom;
+            btnClose.Dock = DockStyle.Bottom;
         }
 
         private void LoadSubjects()
@@ -85,7 +78,7 @@ namespace schedule
 
         private void BtnDelete_Click(object sender, EventArgs e)
         {
-            if(listBox.SelectedIndex != -1)
+            if (listBox.SelectedIndex != -1)
             {
                 string selectedSubject = listBox.SelectedItem.ToString();
                 RemoveSubject(selectedSubject);

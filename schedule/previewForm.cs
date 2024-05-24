@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
 
 namespace schedule
 {
@@ -30,6 +25,8 @@ namespace schedule
             previewDataGridView.AllowUserToAddRows = false; // Запретить добавление строк
             previewDataGridView.AllowUserToDeleteRows = false; // Запретить удаление строк
             previewDataGridView.ReadOnly = true; // Сделать DataGridView только для чтения
+            previewDataGridView.BackgroundColor = SystemColors.ActiveCaption;
+            previewDataGridView.DefaultCellStyle.BackColor = SystemColors.GradientActiveCaption;
             this.Controls.Add(previewDataGridView);
         }
 
@@ -74,5 +71,5 @@ namespace schedule
                 }
             }
         }
-        }
+    }
 }
