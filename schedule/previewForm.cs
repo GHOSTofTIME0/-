@@ -8,8 +8,7 @@ namespace schedule
     public partial class previewForm : Form
     {
 
-        int rows4 = 5;
-        int rows5 = 7;
+
 
         private DataGridView previewDataGridView;
         public previewForm()

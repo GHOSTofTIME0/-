@@ -2,7 +2,6 @@ C:\Users\ilya2\source\repos\schedule\schedule\bin\Debug\schedule.exe.config
 C:\Users\ilya2\source\repos\schedule\schedule\bin\Debug\schedule.exe
 C:\Users\ilya2\source\repos\schedule\schedule\bin\Debug\schedule.pdb
 C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.csproj.AssemblyReference.cache
-C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.csproj.SuggestedBindingRedirects.cache
 C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.Form1.resources
 C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.Properties.Resources.resources
 C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.csproj.GenerateResource.cache
@@ -60,7 +59,6 @@ C:\Users\ilya2\source\repos\schedule\schedule\bin\Debug\vi\Humanizer.resources.d
 C:\Users\ilya2\source\repos\schedule\schedule\bin\Debug\zh-CN\Humanizer.resources.dll
 C:\Users\ilya2\source\repos\schedule\schedule\bin\Debug\zh-Hans\Humanizer.resources.dll
 C:\Users\ilya2\source\repos\schedule\schedule\bin\Debug\zh-Hant\Humanizer.resources.dll
-C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.csproj.CopyComplete
 C:\Users\ilya2\source\repos\schedule\schedule\bin\Debug\LinqToExcel.dll
 C:\Users\ilya2\source\repos\schedule\schedule\bin\Debug\Remotion.Data.Linq.dll
 C:\Users\ilya2\source\repos\schedule\schedule\bin\Debug\Remotion.dll
@@ -76,3 +74,5 @@ C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\ru\schedule.resources.dl
 C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.Form2.resources
 C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.Form4.resources
 C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.previewForm.resources
+C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.csproj.Up2Date
+C:\Users\ilya2\source\repos\schedule\schedule\obj\Debug\schedule.infoSubjectsForm.resources

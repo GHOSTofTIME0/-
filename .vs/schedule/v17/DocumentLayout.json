@@ -1,0 +1,136 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\ilya2\\source\\repos\\schedule\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6145BAC0-2B22-4B8C-A169-E394D7B21A69}|schedule\\schedule.csproj|c:\\users\\ilya2\\source\\repos\\schedule\\schedule\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6145BAC0-2B22-4B8C-A169-E394D7B21A69}|schedule\\schedule.csproj|solutionrelative:schedule\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6145BAC0-2B22-4B8C-A169-E394D7B21A69}|schedule\\schedule.csproj|c:\\users\\ilya2\\source\\repos\\schedule\\schedule\\previewform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6145BAC0-2B22-4B8C-A169-E394D7B21A69}|schedule\\schedule.csproj|solutionrelative:schedule\\previewform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6145BAC0-2B22-4B8C-A169-E394D7B21A69}|schedule\\schedule.csproj|c:\\users\\ilya2\\source\\repos\\schedule\\schedule\\previewform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{6145BAC0-2B22-4B8C-A169-E394D7B21A69}|schedule\\schedule.csproj|solutionrelative:schedule\\previewform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6145BAC0-2B22-4B8C-A169-E394D7B21A69}|schedule\\schedule.csproj|C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\infosubjectsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6145BAC0-2B22-4B8C-A169-E394D7B21A69}|schedule\\schedule.csproj|solutionrelative:schedule\\infosubjectsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6145BAC0-2B22-4B8C-A169-E394D7B21A69}|schedule\\schedule.csproj|C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\infosubjectsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{6145BAC0-2B22-4B8C-A169-E394D7B21A69}|schedule\\schedule.csproj|solutionrelative:schedule\\infosubjectsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6145BAC0-2B22-4B8C-A169-E394D7B21A69}|schedule\\schedule.csproj|C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{6145BAC0-2B22-4B8C-A169-E394D7B21A69}|schedule\\schedule.csproj|solutionrelative:schedule\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\Form1.cs",
+              "RelativeDocumentMoniker": "schedule\\Form1.cs",
+              "ToolTip": "C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\Form1.cs",
+              "RelativeToolTip": "schedule\\Form1.cs",
+              "ViewState": "AQIAALcBAAAAAAAAAAAIwMUBAABAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-20T21:58:48.448Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "previewForm.cs",
+              "DocumentMoniker": "C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\previewForm.cs",
+              "RelativeDocumentMoniker": "schedule\\previewForm.cs",
+              "ToolTip": "C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\previewForm.cs",
+              "RelativeToolTip": "schedule\\previewForm.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T20:13:41.736Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "previewForm.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "DocumentMoniker": "C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\previewForm.cs",
+              "RelativeDocumentMoniker": "schedule\\previewForm.cs",
+              "ToolTip": "C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\previewForm.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "RelativeToolTip": "schedule\\previewForm.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T20:13:32.932Z",
+              "EditorCaption": " [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "infoSubjectsForm.cs",
+              "DocumentMoniker": "C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\infoSubjectsForm.cs",
+              "RelativeDocumentMoniker": "schedule\\infoSubjectsForm.cs",
+              "ToolTip": "C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\infoSubjectsForm.cs",
+              "RelativeToolTip": "schedule\\infoSubjectsForm.cs",
+              "ViewState": "AQIAABEAAAAAAAAAAAAQwB8AAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-25T19:41:11.506Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "infoSubjectsForm.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "DocumentMoniker": "C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\infoSubjectsForm.cs",
+              "RelativeDocumentMoniker": "schedule\\infoSubjectsForm.cs",
+              "ToolTip": "C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\infoSubjectsForm.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "RelativeToolTip": "schedule\\infoSubjectsForm.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-25T19:37:41.365Z",
+              "EditorCaption": " [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Form1.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "DocumentMoniker": "C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\Form1.cs",
+              "RelativeDocumentMoniker": "schedule\\Form1.cs",
+              "ToolTip": "C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\Form1.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "RelativeToolTip": "schedule\\Form1.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-20T21:58:47.02Z",
+              "EditorCaption": " [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
