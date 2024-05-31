@@ -35,7 +35,7 @@ namespace schedule
                 TabPage tabPage = new TabPage($"Класс {i}");
                 tabControl.TabPages.Add(tabPage);
 
-                if(i > 4 && i <10)
+                if (i > 4 && i < 10)
                 {
                     tableName = "Disciplines5_9";
                 }
@@ -47,7 +47,7 @@ namespace schedule
                 {
                     tableName = "Disciplines1_4";
                 }
-               
+
                 Dictionary<int, Dictionary<string, int>> headers = form1Instance.GetDisciplinesHeaders(form1Instance.connectString, tableName, i);
 
                 // Add Labels to the tabPage

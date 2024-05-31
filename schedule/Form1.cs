@@ -20,7 +20,7 @@ namespace schedule
         private readonly string[] daysOfWeek = { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" };
         private string outputPath;
         private static string projectPath = Directory.GetParent(System.Windows.Forms.Application.StartupPath).Parent.Parent.FullName;
-        public  string connectString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\ilya2\\source\\repos\\schedule\\schedule\\bin\\Debug\\shedule.mdb;";
+        public  string connectString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={Path.Combine(projectPath, "source", "shedule.mdb")}";
 
         private Dictionary<int, Dictionary<string, int>> difficultyLimits = new Dictionary<int, Dictionary<string, int>>
 {
@@ -38,7 +38,7 @@ namespace schedule
 };
 
 
-        private Dictionary<int, Dictionary<string, int>> headersI = new Dictionary<int, Dictionary<string, int>>();
+        public Dictionary<int, Dictionary<string, int>> headersI = new Dictionary<int, Dictionary<string, int>>();
 
         public Form1()
         {
@@ -181,20 +181,20 @@ namespace schedule
                         tableName = "Disciplines10_11";
 
                     // Получаем названия полей из таблицы и заполняем ComboBox
-                    Dictionary<int, Dictionary<string, int>> headers = GetDisciplinesHeaders(connectString, tableName, classNumber);
-                    headersI[classNumber] = headers[classNumber];
-                    if (headers.ContainsKey(classNumber))
-                    {
-                        Dictionary<string, int> classHeaders = headers[classNumber];
-                        foreach (var header in classHeaders)
+                        Dictionary<int, Dictionary<string, int>> headers = GetDisciplinesHeaders(connectString, tableName, classNumber);
+                        headersI[classNumber] = headers[classNumber];
+                        if (headers.ContainsKey(classNumber))
                         {
-                            if (header.Value != 0)
+                            Dictionary<string, int> classHeaders = headers[classNumber];
+                            foreach (var header in classHeaders)
                             {
-                                subjectColumn.Items.Add(header.Key);
+                                if (header.Value != 0)
+                                {
+                                    subjectColumn.Items.Add(header.Key);
+                                }
                             }
-                        }
 
-                    }
+                        }
                 }
                 else
                 {
@@ -266,7 +266,14 @@ namespace schedule
             {
                 DataGridView currentDataGridView = (DataGridView)sender;
                 string classNumberText = currentDataGridView.Parent.Text;
-                int classNumber = int.Parse(System.Text.RegularExpressions.Regex.Match(classNumberText, @"\d+").Value);
+                string classNumberString = System.Text.RegularExpressions.Regex.Match(classNumberText, @"\d+").Value;
+
+                if (!int.TryParse(classNumberString, out int classNumber))
+                {
+                    MessageBox.Show($"Невозможно определить номер класса из текста '{classNumberText}'", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 string selectedDay = currentDataGridView.Columns[e.ColumnIndex % 2 == 0 ? e.ColumnIndex - 1 : e.ColumnIndex].HeaderText;
 
                 if (e.ColumnIndex % 2 != 0) // Проверяем только ячейки с предметами (нечетные столбцы)
@@ -278,27 +285,48 @@ namespace schedule
 
                     if (selectedSubject != null)
                     {
-                        if (headersI.ContainsKey(classNumber) && headersI[classNumber].ContainsKey(selectedSubject))
+                        if (!headersI.ContainsKey(classNumber))
                         {
-                            int totalDifficulty = 0;
-                            foreach (DataGridViewRow row in currentDataGridView.Rows)
+                            MessageBox.Show($"Отсутствует информация о дисциплинах для класса {classNumber}.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        if (!headersI[classNumber].ContainsKey(selectedSubject))
+                        {
+                            MessageBox.Show($"Отсутствует информация о предмете '{selectedSubject}' для класса {classNumber}.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        int totalDifficulty = 0;
+                        foreach (DataGridViewRow row in currentDataGridView.Rows)
+                        {
+                            if (row.Cells[e.ColumnIndex] is DataGridViewComboBoxCell cell && cell.Value != null)
                             {
-                                if (row.Cells[e.ColumnIndex] is DataGridViewComboBoxCell cell && cell.Value != null)
+                                string subject = cell.Value.ToString();
+                                if (headersI[classNumber].ContainsKey(subject))
                                 {
-                                    string subject = cell.Value.ToString();
-                                    if (headersI[classNumber].ContainsKey(subject))
-                                    {
-                                        totalDifficulty += headersI[classNumber][subject];
-                                    }
+                                    totalDifficulty += headersI[classNumber][subject];
                                 }
                             }
+                        }
 
-                            if (totalDifficulty > difficultyLimits[classNumber][selectedDay])
-                            {
-                                MessageBox.Show($"Сумма баллов сложности предметов в день ({totalDifficulty}) '{selectedDay}' превышает допустимое значение для {classNumber} класса ({difficultyLimits[classNumber][selectedDay]})", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                comboBoxCell.Value = null; // Сбрасываем значение текущей ячейки
-                                return; // Прерываем выполнение метода
-                            }
+                        if (!difficultyLimits.ContainsKey(classNumber))
+                        {
+                            MessageBox.Show($"Отсутствует информация о лимитах сложности для класса {classNumber}.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        if (!difficultyLimits[classNumber].ContainsKey(selectedDay))
+                        {
+                            MessageBox.Show($"Отсутствует информация о лимитах сложности для дня '{selectedDay}' в классе {classNumber}.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        if (totalDifficulty > difficultyLimits[classNumber][selectedDay])
+                        {
+                            MessageBox.Show($"Сумма баллов сложности предметов в день '{selectedDay}' ({totalDifficulty}) превышает допустимое значение для {classNumber} класса ({difficultyLimits[classNumber][selectedDay]})", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            comboBoxCell.Value = null; // Сбрасываем значение текущей ячейки
+                            return; // Прерываем выполнение метода
                         }
                     }
 
@@ -634,8 +662,9 @@ namespace schedule
                                     string columnName = reader.GetName(i);
                                     if (columnName != "Class")
                                     {
-                                        // Добавляем заголовок и балл в словарь для текущего номера класса
+                                        
                                         int fieldValue = Convert.ToInt32(reader[columnName]);
+                                        
                                         headers[classNumber][columnName] = fieldValue;
 
                                     }

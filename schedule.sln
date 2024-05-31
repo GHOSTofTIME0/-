@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "schedule", "schedule\schedule.csproj", "{6145BAC0-2B22-4B8C-A169-E394D7B21A69}"
 EndProject
-Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "DateInputForm", "..\DateInputForm\DateInputForm\bin\Debug\DateInputForm.exe", "{21A07758-7F88-42AA-AEC7-C25AEC915C58}"
+Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "DateInputForm", "DateInputForm\DateInputForm\bin\Debug\DateInputForm.exe", "{21A07758-7F88-42AA-AEC7-C25AEC915C58}"
 	ProjectSection(DebuggerProjectSystem) = preProject
 		PortSupplier = 00000000-0000-0000-0000-000000000000
 		Executable = C:\Users\ilya2\source\repos\DateInputForm\DateInputForm\bin\Debug\DateInputForm.exe
@@ -21,23 +21,43 @@ Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "DateInputForm", "..\DateInp
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		adb|Any CPU = adb|Any CPU
+		adb|x64 = adb|x64
+		adb|x86 = adb|x86
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.adb|Any CPU.ActiveCfg = adb|Any CPU
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.adb|Any CPU.Build.0 = adb|Any CPU
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.adb|x64.ActiveCfg = sdfsfsd|x64
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.adb|x64.Build.0 = sdfsfsd|x64
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.adb|x86.ActiveCfg = adb|x86
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.adb|x86.Build.0 = adb|x86
 		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Debug|x64.ActiveCfg = Debug|x64
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Debug|x64.Build.0 = Debug|x64
 		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Debug|x86.Build.0 = Debug|Any CPU
 		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Release|x64.ActiveCfg = Release|x64
+		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Release|x64.Build.0 = Release|x64
 		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Release|x86.ActiveCfg = Release|Any CPU
 		{6145BAC0-2B22-4B8C-A169-E394D7B21A69}.Release|x86.Build.0 = Release|Any CPU
+		{21A07758-7F88-42AA-AEC7-C25AEC915C58}.adb|Any CPU.ActiveCfg = Release|x86
+		{21A07758-7F88-42AA-AEC7-C25AEC915C58}.adb|x64.ActiveCfg = Release
+		{21A07758-7F88-42AA-AEC7-C25AEC915C58}.adb|x86.ActiveCfg = Release|x86
 		{21A07758-7F88-42AA-AEC7-C25AEC915C58}.Debug|Any CPU.ActiveCfg = Release|x86
+		{21A07758-7F88-42AA-AEC7-C25AEC915C58}.Debug|x64.ActiveCfg = Release
 		{21A07758-7F88-42AA-AEC7-C25AEC915C58}.Debug|x86.ActiveCfg = Release|x86
 		{21A07758-7F88-42AA-AEC7-C25AEC915C58}.Release|Any CPU.ActiveCfg = Release|x86
+		{21A07758-7F88-42AA-AEC7-C25AEC915C58}.Release|x64.ActiveCfg = Release
 		{21A07758-7F88-42AA-AEC7-C25AEC915C58}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
