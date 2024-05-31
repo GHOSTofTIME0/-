@@ -20,7 +20,7 @@ namespace schedule
         private readonly string[] daysOfWeek = { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" };
         private string outputPath;
         private static string projectPath = Directory.GetParent(System.Windows.Forms.Application.StartupPath).Parent.Parent.FullName;
-        public  string connectString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={Path.Combine(projectPath, "source", "shedule.mdb")}";
+        public  string connectString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={Path.Combine(projectPath, "schedule", "source", "shedule.mdb")}";
 
         private Dictionary<int, Dictionary<string, int>> difficultyLimits = new Dictionary<int, Dictionary<string, int>>
 {
